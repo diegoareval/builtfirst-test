@@ -10,7 +10,7 @@ const CardList = ({ products = [], isFilterActive = false }) => {
       {products.map((product, index) => (
         <div>
           <div className="min-h-[200px] min-w-[200px] flex flex-col justify-between">
-           <div className="flex gap-3 align-center">
+           <div className="flex pr-5 justify-between align-center">
            <div class="relative w-12 h-12">
     <img class="rounded-full border border-gray-100 shadow-sm" src={product.logo} alt="user image" />
     <div class="absolute top-0 right-0 h-3 w-3 my-1 border-2 border-white rounded-full bg-green-400 z-2"></div>
@@ -18,7 +18,7 @@ const CardList = ({ products = [], isFilterActive = false }) => {
             <div className="text-center mt-5 opacity-50 text-sm">{product.providerName}</div>
            </div>
            <div className="text-center text-sm text-[#0000FF]">
-            Save {product.saveAmount}
+            Save ${product.saveAmount}
             </div>
             <div className="text-center text-sm text-[#5F9EA0]">
              {product.title}
