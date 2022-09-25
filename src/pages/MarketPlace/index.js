@@ -4,6 +4,7 @@ import AppContainer from "../../components/AppContainer";
 import useBooleanToggler, {
   useWorkingIndicator,
 } from "../../hooks/useBooleanToggler";
+import {useDebounce} from '../../hooks/useDebounce'
 import ImageIcon, { ICONS } from "../../components/ImageIcon";
 import Badge from "../../components/Badge";
 import CardList from "../../components/CardList";
@@ -15,6 +16,7 @@ const MarketPlace = () => {
   const { isToggled: isToggleFilter, toggle: toggleFilter } =
     useBooleanToggler();
   const [search, setSearch] = useState("")
+  const lastValue = useDebounce(search, 500);
   const [products, setProducts] = useState([]);
   const { isWorking, startWork, finishWork } = useWorkingIndicator({
     initialValue: true,
@@ -57,7 +59,7 @@ const MarketPlace = () => {
   //   closeSort();
   // };
 
-  const items = searchInArray(search, products, "providerName")
+  const items = searchInArray(lastValue, products, "providerName")
 
   return (
     <LandingPageLayout>
