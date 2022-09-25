@@ -7,43 +7,26 @@ import useBooleanToggler, {
 import ImageIcon, { ICONS } from "../../components/ImageIcon";
 import Badge from "../../components/Badge";
 import CardList from "../../components/CardList";
-import { dummyProducts } from "../../utils";
+import { dummyDisccounts, searchInArray } from "../../utils";
 import Filter from "./Filter";
 
-const filterOptions = ["LATEST", "NEW", "OTHER"];
 
 const MarketPlace = () => {
   const { isToggled: isToggleFilter, toggle: toggleFilter } =
     useBooleanToggler();
-
+  const [search, setSearch] = useState("")
   const [products, setProducts] = useState([]);
-  const {
-    isToggled: showSort,
-    reToggle: openSort,
-    unToggle: closeSort,
-  } = useBooleanToggler();
   const { isWorking, startWork, finishWork } = useWorkingIndicator({
     initialValue: true,
   });
 
   // state filter
   const [filter, setFilter] = useState({
-    sort: filterOptions[0],
-    models: [],
-    menSizes: [],
-    womanSizes: [],
-    kidSizes: [],
+    sort: 'asc',
+    recommendOptions: [],
+    sellerOptions: []
   });
 
-  const handlerClearFilter = () => {
-    setFilter({
-      sort: filterOptions[0],
-      models: [],
-      menSizes: [],
-      womanSizes: [],
-      kidSizes: [],
-    });
-  };
 
   const handlerChangeFilter = (filterNew) => {
     setFilter({
@@ -57,7 +40,7 @@ const MarketPlace = () => {
       // TODO: fetch data from API
       startWork();
       setTimeout(() => {
-        setProducts(dummyProducts);
+        setProducts(dummyDisccounts);
         finishWork();
       }, 2000);
     };
@@ -66,13 +49,15 @@ const MarketPlace = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [filter]);
 
-  const handleSort = (sort) => {
-    setFilter({
-      ...filter,
-      sort,
-    });
-    closeSort();
-  };
+  // const handleSort = (sort) => {
+  //   setFilter({
+  //     ...filter,
+  //     sort,
+  //   });
+  //   closeSort();
+  // };
+
+  const items = searchInArray(search, products, "providerName")
 
   return (
     <LandingPageLayout>
@@ -92,7 +77,7 @@ const MarketPlace = () => {
               className="text-lg cursor-pointer md:ml-[70px]"
             >
              <input class="shadow appearance-none border border-red-500 rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline" 
-              type="text" placeholder="search from companies and services"/>
+              type="text" onChange={(e)=> {setSearch(e.target.value)}} value={search} placeholder="search from companies and services"/>
             </div>
           </div>
 
@@ -125,7 +110,7 @@ const MarketPlace = () => {
               <div className="text-center opacity-50 text-lg">Loading...</div>
             )}
 
-            <CardList products={products} isFilterActive={isToggleFilter} />
+            <CardList products={items} isFilterActive={isToggleFilter} />
           </div>
         </div>
       </AppContainer>
